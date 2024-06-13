@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+<h:head>
+    <title>Todo List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .todo-form {
+            margin-bottom: 20px;
+        }
+
+        .todo-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .todo-item {
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 50px; /* Set minimum height for each row */
+        }
+
+        .todo-item .text {
+            flex: 1;
+            word-wrap: break-word; /* Allow long strings to break and display in next line */
+        }
+
+        .todo-item .delete-btn {
+            background-color: #ff5c5c;
+            color: #fff;
+            padding: 6px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .todo-item .delete-btn:hover {
+            background-color: #ff0000;
+        }
+    </style>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <div class="header">
+            <h1>Todo List</h1>
+        </div>
+        <div class="user-info">
+            <h3>Welcome, #{sessionScope.email}!</h3>
+            <h:form>
+                <h:commandLink value="Logout" action="#{loginBean.logout}" styleClass="btn" />
+            </h:form>
+        </div>
+        <div class="todo-form">
+            <h:form>
+                <h:inputText value="#{todoBean.newTodo}" styleClass="todo-input"  />
+                <br/>
+                <h:commandButton value="Add Todo" action="#{todoBean.addTodo}" styleClass="btn" />
+            </h:form>
+        </div>
+        <ul class="todo-list">
+            <c:forEach items="#{todoBean.todoList}" var="todo">
+                <li class="todo-item">
+                    <span class="text" id="todoText">#{todo}</span>
+                    <h:form>
+                        <h:commandButton value="Delete" action="#{todoBean.deleteTodo(todo)}" styleClass="delete-btn" />
+                    </h:form>
+                </li>
+            </c:forEach>
+        </ul>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var todoTexts = document.querySelectorAll('.text');
+            todoTexts.forEach(function(todoText) {
+                var textLength = todoText.innerText.length;
+                if (textLength > 20) { // Change 20 to your desired threshold
+                    todoText.style.fontSize = '14px'; // Change the font size as needed
+                }
+            });
+        });
+    </script>
+</h:body>
+</html>
